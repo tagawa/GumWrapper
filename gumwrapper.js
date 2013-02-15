@@ -19,7 +19,7 @@
 
             function successCallback(stream) {
                 // Set the source of the video element with the stream from the camera
-                if (video.mozCaptureStream) {
+                if (video.mozSrcObject !== undefined) {
                     video.mozSrcObject = stream;
                 } else {
                     video.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
