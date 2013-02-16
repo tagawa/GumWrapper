@@ -4,9 +4,13 @@
     window.GumWrapper = function(elements, success, error) {
         // Define our error message
         function sendError(message) {
-            var e = new Error();
-            e.message = message;
-            error(e);
+            if (error) {
+                var e = new Error();
+                e.message = message;
+                error(e);
+            } else {
+                console.error(message);
+            }
         }
         
         // Try to play the media stream
@@ -44,7 +48,7 @@
             // Check the video dimensions when data has loaded
             video.addEventListener('loadeddata', function() {
                 if (video.videoWidth > 0 && video.videoHeight > 0) {
-                    success(video);
+                    if (success) success(video);
                 } else {
                     sendError('Unable to play video stream. Is webcam working?');
                 }
