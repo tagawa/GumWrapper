@@ -22,3 +22,7 @@ Call the play method and you should be good to go!
     gum.play();
 
 Open `example.html` to see it in action.
+
+## License
+
+Licensed under the MIT license.
