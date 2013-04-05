@@ -8,7 +8,7 @@ A wrapper for getUserMedia, enabling easy cross-browser support for webcam acces
 
 ## Dependencies
 
-- The latest Firefox, Opera or Chrome/Chromium. N.b. if using Firefox, `media.peerconnection.enabled` needs to be set to `true` in `about:config`
+- The latest Firefox, Opera or Chrome/Chromium. N.b. if using Firefox 18 or 19, `media.peerconnection.enabled` needs to be set to `true` in `about:config`
 - JavaScript turned on - note no other libraries required.
 
 ## Usage
