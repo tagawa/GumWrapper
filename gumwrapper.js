@@ -1,3 +1,9 @@
+/*!
+ * GumWrapper v0.13
+ * By Daniel Davis under MIT License
+ * https://github.com/tagawa/GumWrapper
+ */
+
 ;(function (window, document) {
     'use strict';
     
@@ -47,11 +53,25 @@
             
             // Check the video dimensions when data has loaded
             video.addEventListener('loadeddata', function() {
-                if (video.videoWidth > 0 && video.videoHeight > 0) {
-                    if (success) success(video);
-                } else {
-                    sendError('Unable to play video stream. Is webcam working?');
+                var attempts = 10;
+                
+                function checkVideo() {
+                    if (attempts > 0) {
+                        if (video.videoWidth > 0 && video.videoHeight > 0) {
+                            // Execute success callback function
+                            if (success) success(video);
+                        } else {
+                            // Wait a bit and try again
+                            window.setTimeout(checkVideo, 500);
+                        }
+                    } else {
+                        // Give up after 10 attempts
+                        sendError('Unable to play video stream. Is webcam working?');
+                    }
+                    attempts--;
                 }
+                
+                checkVideo();
             }, false);
         }
 
