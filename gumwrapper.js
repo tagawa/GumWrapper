@@ -88,6 +88,14 @@
                                navigator.mozGetUserMedia ||
                                navigator.msGetUserMedia;
             return getUserMedia.apply(navigator, arguments);
-        }
+        },
+        GumWrapper: function (getUserMedia, elements) {
+            this.play = function() {
+                getUserMedia(null, function(stream) {
+                    elements.video.src = stream;
+                });
+                elements.video.play()
+            };
+        },
     };
 })(window, document);
