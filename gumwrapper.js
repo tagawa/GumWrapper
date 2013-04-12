@@ -79,4 +79,15 @@
             play: play
         };
     };
+
+    // support module
+    window.gumwrapper = {
+        platformGetUserMedia: function() {
+            var getUserMedia = navigator.getUserMedia ||
+                               navigator.webkitGetUserMedia ||
+                               navigator.mozGetUserMedia ||
+                               navigator.msGetUserMedia;
+            return getUserMedia.apply(navigator, arguments);
+        }
+    };
 })(window, document);
