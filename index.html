@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GumWrapper is a wrapper for getUserMedia, enabling easy cross-browser support for webcam access with JavaScript.">
+    <title>GumWrapper - a wrapper for getUserMedia</title>
+    <link href="https://assets-cdn.github.com/assets/github-103bf8d2b1dea2db4acbc559814b3fd9946f59c9095d752f791cc53756725cd0.css" media="all" rel="stylesheet" type="text/css">
+    <style>
+    body {
+        padding: 30px;
+    }
+    </style>
+</head>
+<body>
+    <article class="markdown-body">
+        <h1>GumWrapper</h1>
+
+        <h2>Introduction</h2>
+
+        <p>A wrapper for getUserMedia, enabling easy cross-browser support for webcam access with JavaScript.</p>
+
+        <h2>Usage</h2>
+
+        <p>First, create a new instance of <code>GumWrapper</code>, providing the id of a video element. The success and error callback arguments are optional.</p>
+
+        <pre><code>var gum = new GumWrapper({video: 'myVideo'}, showSuccess, showError);</code></pre>
+
+        <p>Call the play method and you should be good to go!</p>
+
+        <pre><code>gum.play();</code></pre>
+
+        <p><a href="https://tagawa.github.io/GumWrapper/example.html">Here's a demo</a> to see it in action.</p>
+        
+        <h2>Download</h2>
+
+        <p>Get the code and example file from the <a href="https://github.com/tagawa/GumWrapper">GumWrapper project page</a>.</p>
+
+        <h2>Dependencies</h2>
+
+        <ul>
+        <li>The latest Firefox, Opera or Chrome/Chromium. N.b. if using Firefox 18 or 19, <code>media.peerconnection.enabled</code> needs to be set to <code>true</code> in <code>about:config</code>
+        </li>
+        <li>JavaScript turned on - no other libraries required.</li>
+        </ul>
+
+        <h2>License</h2>
+
+        <p>Licensed under the MIT license.</p>
+    </article>
+</body>
+</html>
