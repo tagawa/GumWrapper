@@ -7,15 +7,19 @@
 ; GumWrapper = (function (window, document) {
     'use strict';
 
-    var GumWrapper = function GumWrapper(elements, success, error) {
+    var GumWrapper = function GumWrapper(options, success, error) {
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
         window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
 
         this.video = null;
-        this.elements = elements;
+        this.options = options || {};
+        this.options.constraints = this.options.constraints || {
+            audio: false,
+            video: true
+        };
         this.success = success;
         this.error = error;
-        this.isGetUserMediaAvailable = !!navigator.getUserMedia;
+        this.isGetUserMediaAvailable = !!(navigator.getUserMedia || (navigator.mediaDevices && navigator.mediaDevices.getUserMedia));
     };
 
     // Define our error message
@@ -32,9 +36,9 @@
     // Try to play the media stream
     GumWrapper.prototype.play = function play() {
         var that = this;
-        this.video = this.elements.video && this.elements.video.nodeName === "VIDEO" ?
-            this.elements.video :
-            document.getElementById(this.elements.video);
+        this.video = this.options.video && this.options.video.nodeName === "VIDEO" ?
+            this.options.video :
+            document.getElementById(this.options.video);
         if (!this.video) {
             this.sendError('Unable to find the video element.');
             return;
@@ -44,12 +48,24 @@
         function successCallback(stream) {
             that.stream = stream;
             // Set the source of the video element with the stream from the camera
-            if (that.video.mozSrcObject !== undefined) {
+            if ('srcObject' in that.video) {
+                that.video.srcObject = stream;
+            } else if ('mozSrcObject' in that.video) {
                 that.video.mozSrcObject = stream;
             } else {
                 that.video.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
             }
-            that.video.play();
+            
+            if (that.video.paused) {
+                try {
+                    that.video.play();
+                } catch (e) {
+                    if (!that.video.autoplay) {
+                        that.video.autoplay = true;
+                        that.video.srcObject = that.video.srcObject;
+                    }
+                }
+            }
         }
 
         function errorCallback(error) {
@@ -57,8 +73,10 @@
         }
 
         // Call the getUserMedia method with our callback functions
-        if (navigator.getUserMedia) {
-            navigator.getUserMedia({ video: true }, successCallback, errorCallback);
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia(this.options.constraints).then(successCallback, errorCallback);
+        } else if (navigator.getUserMedia) {
+            navigator.getUserMedia(this.options.constraints, successCallback, errorCallback);
         } else {
             that.sendError('Native web camera streaming (getUserMedia) not supported in this browser.');
         }
@@ -101,11 +119,15 @@
         }
 
         this.video.pause();
-        if (this.video.mozSrcObject) {
-            this.video.mozSrcObject = null;
-        } else {
-            this.video.src = null;
-        }
+        try {
+            if (this.video.srcObject) {
+                this.video.srcObject = null;
+            }
+            if (this.video.mozSrcObject) {
+                this.video.mozSrcObject = null;
+            }
+        } catch (e) { }
+        this.video.src = null;
 
         if (this.stream) {
             var tracks = this.stream.getTracks();
