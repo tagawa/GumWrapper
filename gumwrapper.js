@@ -116,9 +116,6 @@
                     track.enabled = false;
                 }
             }
-            if (this.stream.active) {
-                this.stream.active = false;
-            }
             this.stream = null;
         }
 
